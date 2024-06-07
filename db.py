@@ -7,8 +7,12 @@ def initialize_db():
     c.execute('''
     CREATE TABLE IF NOT EXISTS Employees (
         EmployeeID INTEGER PRIMARY KEY AUTOINCREMENT,
-        Name TEXT NOT NULL,
-        IsAssigned BOOLEAN DEFAULT FALSE
+        FirstName TEXT NOT NULL,
+        LastName TEXT NOT NULL,
+        JobTitle TEXT NOT NULL,
+        Pointed BOOLEAN DEFAULT FALSE,
+        MachineID INTEGER,
+        FOREIGN KEY (MachineID) REFERENCES Machines(MachineID)
     )
     ''')
 
