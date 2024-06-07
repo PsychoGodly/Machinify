@@ -1,6 +1,6 @@
 import sys
 import sqlite3
-from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QTableWidget, QTableWidgetItem, QHeaderView, QMessageBox
+from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QTableWidget, QTableWidgetItem, QHeaderView, QDialog, QLabel, QLineEdit, QMessageBox
 
 def initialize_db():
     conn = sqlite3.connect('assignment.db')
@@ -36,6 +36,68 @@ def initialize_db():
     conn.commit()
     conn.close()
 
+class AddEmployeeDialog(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("Add Employee")
+        self.layout = QVBoxLayout()
+
+        self.name_label = QLabel("Employee Name:")
+        self.name_input = QLineEdit()
+
+        self.submit_button = QPushButton("Add")
+        self.submit_button.clicked.connect(self.add_employee)
+
+        self.layout.addWidget(self.name_label)
+        self.layout.addWidget(self.name_input)
+        self.layout.addWidget(self.submit_button)
+
+        self.setLayout(self.layout)
+
+    def add_employee(self):
+        name = self.name_input.text()
+        if name:
+            conn = sqlite3.connect('assignment.db')
+            c = conn.cursor()
+            c.execute("INSERT INTO Employees (Name) VALUES (?)", (name,))
+            conn.commit()
+            conn.close()
+            self.accept()  # Close the dialog
+
+class AddMachineDialog(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("Add Machine")
+        self.layout = QVBoxLayout()
+
+        self.name_label = QLabel("Machine Name:")
+        self.name_input = QLineEdit()
+
+        self.max_employees_label = QLabel("Max Employees:")
+        self.max_employees_input = QLineEdit()
+
+        self.submit_button = QPushButton("Add")
+        self.submit_button.clicked.connect(self.add_machine)
+
+        self.layout.addWidget(self.name_label)
+        self.layout.addWidget(self.name_input)
+        self.layout.addWidget(self.max_employees_label)
+        self.layout.addWidget(self.max_employees_input)
+        self.layout.addWidget(self.submit_button)
+
+        self.setLayout(self.layout)
+
+    def add_machine(self):
+        name = self.name_input.text()
+        max_employees = self.max_employees_input.text()
+        if name and max_employees.isdigit():
+            conn = sqlite3.connect('assignment.db')
+            c = conn.cursor()
+            c.execute("INSERT INTO Machines (Name, MaxEmployees) VALUES (?, ?)", (name, int(max_employees)))
+            conn.commit()
+            conn.close()
+            self.accept()  # Close the dialog
+
 class AssignmentApp(QWidget):
     def __init__(self):
         super().__init__()
@@ -52,11 +114,11 @@ class AssignmentApp(QWidget):
         self.load_data()
 
         self.add_employee_btn = QPushButton('Add Employee')
-        self.add_employee_btn.clicked.connect(self.add_employee)
+        self.add_employee_btn.clicked.connect(self.show_add_employee_dialog)
         layout.addWidget(self.add_employee_btn)
 
         self.add_machine_btn = QPushButton('Add Machine')
-        self.add_machine_btn.clicked.connect(self.add_machine)
+        self.add_machine_btn.clicked.connect(self.show_add_machine_dialog)
         layout.addWidget(self.add_machine_btn)
 
         self.setLayout(layout)
@@ -87,13 +149,15 @@ class AssignmentApp(QWidget):
             self.table.setItem(row, 1, QTableWidgetItem(assigned_machine))
             self.table.setCellWidget(row, 2, QPushButton('Assign'))
 
-    def add_employee(self):
-        # Implementation to add a new employee to the database
-        pass
+    def show_add_employee_dialog(self):
+        dialog = AddEmployeeDialog(self)
+        if dialog.exec_():
+            self.load_data()  # Reload data to reflect new entry
 
-    def add_machine(self):
-        # Implementation to add a new machine to the database
-        pass
+    def show_add_machine_dialog(self):
+        dialog = AddMachineDialog(self)
+        if dialog.exec_():
+            self.load_data()  # Reload data to reflect new entry
 
 def main():
     initialize_db()  # Ensure the database is initialized
