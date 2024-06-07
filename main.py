@@ -11,6 +11,20 @@ class EmployeeTab(QWidget):
         self.table.setHorizontalHeaderLabels(["ID", "First Name", "Last Name", "Job Title", "Pointed", "Assigned"])
         
         layout.addWidget(self.table)
+        
+        self.add_button = QPushButton("Add Employee")
+        self.modify_button = QPushButton("Modify Employee")
+        self.delete_button = QPushButton("Delete Employee")
+        self.assign_button = QPushButton("Assign to Machine")
+        
+        button_layout = QVBoxLayout()
+        button_layout.addWidget(self.add_button)
+        button_layout.addWidget(self.modify_button)
+        button_layout.addWidget(self.delete_button)
+        button_layout.addWidget(self.assign_button)
+        
+        layout.addLayout(button_layout)
+        
         self.setLayout(layout)
 
 class MachineTab(QWidget):
@@ -23,6 +37,20 @@ class MachineTab(QWidget):
         self.table.setHorizontalHeaderLabels(["ID", "Name", "Max Employees"])
         
         layout.addWidget(self.table)
+        
+        self.add_button = QPushButton("Add Machine")
+        self.modify_button = QPushButton("Modify Machine")
+        self.delete_button = QPushButton("Delete Machine")
+        self.assign_button = QPushButton("Assign Employee")
+        
+        button_layout = QVBoxLayout()
+        button_layout.addWidget(self.add_button)
+        button_layout.addWidget(self.modify_button)
+        button_layout.addWidget(self.delete_button)
+        button_layout.addWidget(self.assign_button)
+        
+        layout.addLayout(button_layout)
+        
         self.setLayout(layout)
 
 class AssignmentTab(QWidget):
@@ -35,6 +63,7 @@ class AssignmentTab(QWidget):
         self.table.setHorizontalHeaderLabels(["Machine ID", "Name", "Max Employees"])
         
         layout.addWidget(self.table)
+        
         self.setLayout(layout)
 
 class MainWindow(QMainWindow):
