@@ -3,7 +3,7 @@ import sqlite3
 def initialize_db():
     conn = sqlite3.connect('assignment.db')
     c = conn.cursor()
-    
+
     c.execute('''
     CREATE TABLE IF NOT EXISTS Employees (
         EmployeeID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -11,7 +11,7 @@ def initialize_db():
         IsAssigned BOOLEAN DEFAULT FALSE
     )
     ''')
-    
+
     c.execute('''
     CREATE TABLE IF NOT EXISTS Machines (
         MachineID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -19,7 +19,7 @@ def initialize_db():
         MaxEmployees INTEGER NOT NULL
     )
     ''')
-    
+
     c.execute('''
     CREATE TABLE IF NOT EXISTS Assignments (
         AssignmentID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -30,7 +30,7 @@ def initialize_db():
         UNIQUE (EmployeeID)
     )
     ''')
-    
+
     conn.commit()
     conn.close()
 
